@@ -1,0 +1,98 @@
+.data
+Upperalphabet:
+    .asciiz "Alpha\n","Bravo\n","China\n","Delta\n","Echo\n","Foxtrot\n","Golf\n","Hotel\n",
+    "India\n","Juliet\n","Kilo\n","Lima\n","Mary\n","November\n","Oscar\n","Paper\n","Quebec\n",
+    "Research\n","Sierra\n","Tango\n","Uniform\n","Victor\n","Whisky\n","X-ray\n","Yankee\n","Zulu\n"
+Loweralphabet:
+    .asciiz "alpha\n","bravo\n","china\n","delta\n","echo\n","foxtrot\n","golf\n","hotel\n","india\n",
+    "juliet\n","kilo\n","lima\n","mary\n","november\n","oscar\n","paper\n","quebec\n","research\n",
+    "sierra\n","tango\n","uniform\n","victor\n","whisky\n","x-ray\n","yankee\n","zulu\n"
+Number:		.asciiz "zero\n", "one\n", "two\n", "three\n", "four\n", "five\n", "six\n", "seven\n","eight\n","nine\n"
+alphabet_offset: .word 0,7,14,21,28,34,43,49,56,63,71,77,83,89,99,106,113,121,131,139,146,155,163,171,178,186
+stop:	.ascii "Stop"
+number_offset:	.word 0,6,11,16,23,29,35,40,47,54
+.text 
+main:
+	li $v0, 12
+	syscall 
+	sub  $t0, $v0, 63   # is ?
+	beqz $t0, exit
+	
+	sub  $t0, $v0, 48   # is less than 0?
+	slt  $s0, $t0, $0   #if t0<0 then s0 = 1
+	bnez $s0, none
+	
+	 # is number?
+	sub  $t1, $t0, 10
+	slt  $s1, $t1, $0
+	bnez $s1, getnum
+	
+	 # is capital?
+ 	sub  $t1, $v0, 91
+ 	slt  $s3, $t1, $0 # if v0 <= 'Z' then s3 = 1
+ 	sub  $t2, $v0, 64 
+ 	sgt  $s4, $t2, $0 # if v0 >='A' then s4 = 1
+ 	and  $s0, $s3, $s4 # if s3 == 1 && s4 == 1 
+ 	bnez $s0, getupword 
+ 
+ 	# is lower case?
+ 	sub  $t1, $v0, 123
+ 	slt  $s3, $t1, $0 # if v0 <= 'z' then s3 = 1
+ 	sub  $t2, $v0, 96  
+ 	sgt  $s4, $t2, $0 # if v0 >= 'a' then s4 = 1
+ 	and  $s0, $s3, $s4
+ 	bnez $s0, getlwword
+ 	j none
+	
+	
+	
+	
+getnum:
+	add $t1, $t1, 10
+	sll $t1, $t1, 2
+	la  $s0, number_offset
+	add $s0, $s0, $t1
+	lw  $s1, ($s0)
+	la  $a0, Number
+	add $a0, $a0, $s1
+	li  $v0, 4
+	syscall
+	j main
+	
+getupword:
+	sub $t2, $t2, 1
+ 	sll $t2, $t2, 2
+ 	la  $s0, alphabet_offset
+ 	add $s0, $s0, $t2
+ 	lw  $s1, ($s0)
+ 	la  $a0, Upperalphabet
+ 	add $a0, $s1, $a0
+ 	li  $v0, 4
+ 	syscall
+ 	j main
+ 	
+getlwword:
+	sub $t2, $t2, 1
+ 	sll $t2, $t2, 2
+ 	la  $s0, alphabet_offset
+ 	add $s0, $s0, $t2
+ 	lw  $s1, ($s0)
+ 	la  $a0, Loweralphabet
+ 	add $a0, $s1, $a0
+ 	li  $v0, 4
+ 	syscall
+ 	j main
+none:
+	and $a0, $0, $0
+	add $a0, $a0, 42    # print *
+	li  $v0, 11
+	syscall 
+	j main
+exit:
+	add $a0, $0, '\n'
+	li  $v0, 11
+	syscall 
+	la  $a0, stop
+	li  $v0, 4
+	syscall
+
