@@ -84,7 +84,7 @@ EX运算：ALU运算R型指令的结果/访存指令的地址/beq两源操作数
 
 对于分支指令，其中的地址位是字地址，左移2位得到字节地址，然后+当前地址（PC寄存器中的地址）+4（当前寄存器下一条地址的起始地址），所以分支指令也需要一个加法器来进行该加法计算。
 
-![运算周期rs+SE](https://github.com/dazzleeee/MIPS/blob/main/%E6%97%B6%E9%92%9F%E4%B8%8A%E6%B2%BF%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE.png)   
+![运算周期rs+SE](https://github.com/dazzleeee/MIPS/blob/main/%E8%BF%90%E7%AE%97%E5%91%A8%E6%9C%9Frs%2BSE.png)   
 ![运算周期rs+rt](https://github.com/dazzleeee/MIPS/blob/main/%E8%BF%90%E7%AE%97%E5%91%A8%E6%9C%9Frs_rt.png)
 
 7.数据通路部件：访存与分支周期MEM、写回周期WB
@@ -107,9 +107,10 @@ beq分支指令在这个阶段不访存，但会将PC+4（下一条指令地址�
 .lw指令将存储器数据写回rt寄存器
 
 ![访存与分支周期及写回周期](https://github.com/dazzleeee/MIPS/blob/main/%E8%AE%BF%E5%AD%98%E5%92%8C%E5%88%86%E6%94%AF%E5%91%A8%E6%9C%9F%E5%8F%8A%E5%86%99%E5%9B%9E%E5%91%A8%E6%9C%9F.png)
+
 8.MIPS核心子集数据通路
 
-![MIPS核心子集数据通路]（https://github.com/dazzleeee/MIPS/blob/main/MIPS%E6%A0%B8%E5%BF%83%E5%AD%90%E9%9B%86%E6%95%B0%E6%8D%AE%E9%80%9A%E8%B7%AF%E5%9B%BE.png）
+![MIPS核心子集数据通路](https://github.com/dazzleeee/MIPS/blob/main/MIPS%E6%A0%B8%E5%BF%83%E5%AD%90%E9%9B%86%E6%95%B0%E6%8D%AE%E9%80%9A%E8%B7%AF%E5%9B%BE.png)
 
 .理解：首先，下一条指令的地址存储在PC中，从PC开出2条路，先看第1条，去到指令存储器，根据指令地址找到指令并输出。
 .接下来分析指令，一般来说，指令中包含rs，rt，rd三个部分，rs和rt中的1个或2个用来读取，rd用来写入，
